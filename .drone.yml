@@ -147,44 +147,6 @@ node:
   arch: s390x
 
 steps:
-  - name: build
-    pull: default
-    image: rancher/dapper:v0.5.8
-    commands:
-      - dapper ci
-    privileged: true
-    volumes:
-      - name: docker
-        path: /var/run/docker.sock
-    when:
-      event:
-        - tag
-        - pull_request
-
-  - name: github_binary_release
-    image: rancher/drone-images:github-release-s390x
-    settings:
-      api_key:
-        from_secret: github_token
-      files:
-      - "dist/artifacts/*"
-    when:
-      instance:
-      - drone-publish.rancher.io
-      ref:
-      - refs/head/master
-      - refs/tags/*
-      event:
-      - tag
-
-  - name: stage-binaries
-    image: rancher/dapper:v0.5.8
-    commands:
-      - "cp -r ./bin/* ./package/"
-    when:
-      event:
-        - tag
-
   - name: docker-publish
     image: rancher/drone-images:docker-s390x
     settings:
@@ -200,9 +162,6 @@ steps:
     volumes:
     - name: docker
       path: /var/run/docker.sock
-    when:
-      event:
-        - tag
 
 volumes:
   - name: docker
