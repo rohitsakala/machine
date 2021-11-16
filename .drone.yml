@@ -197,6 +197,9 @@ steps:
       tag: "${DRONE_TAG}-s390x"
       username:
         from_secret: docker_username
+    volumes:
+    - name: docker
+      path: /var/run/docker.sock
     when:
       event:
         - tag
